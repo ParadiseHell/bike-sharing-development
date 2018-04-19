@@ -10,7 +10,7 @@ CREATE TABLE `development` (
 
   PRIMARY KEY (`id`),
 
-	UNIQUE KEY (`bike_id`,`city`,`delivery_at`),
+	UNIQUE KEY (`bike_id`,`city`),
 
 	FOREIGN KEY (`bike_id`) REFERENCES `bike`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
