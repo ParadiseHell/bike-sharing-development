@@ -1,9 +1,7 @@
-import com.chengtao.bikesharing.db.BikeTable
-import com.chengtao.bikesharing.db.DevelopmentTable
+import com.chengtao.bikesharing.database.table.BikeTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 
 fun main(args: Array<String>) {
   Database.connect(
@@ -13,10 +11,8 @@ fun main(args: Array<String>) {
       password = "123456"
   )
   transaction {
-    DevelopmentTable.insert {
-      it[bikeId] = 1
-      it[deliveryAt] = DateTime()
-      it[city] = "天津市"
+    BikeTable.insert {
+      it[name] = "ofo"
     }
   }
 }
