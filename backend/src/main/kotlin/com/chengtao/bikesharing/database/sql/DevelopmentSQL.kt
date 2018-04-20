@@ -14,7 +14,12 @@ object DevelopmentSQL : BaseSQL() {
   /**
    * 插入发展
    */
-  fun insertDevelopment(bikeId: Int, city: String, deliveryAt: Date): Development {
+  fun insertDevelopment(
+    bikeId: Int,
+    city: String,
+    deliveryAt: Date,
+    deliveryCount: Int?
+  ): Development {
     connectDataBase()
     var id: Int? = -1
     transaction {
@@ -23,6 +28,7 @@ object DevelopmentSQL : BaseSQL() {
             it[DevelopmentTable.bikeId] = bikeId
             it[DevelopmentTable.city] = city
             it[DevelopmentTable.deliveryAt] = DateTime(deliveryAt)
+            it[DevelopmentTable.deliveryCount] = deliveryCount
           } get DevelopmentTable.id
     }
     return queryDevelopmentById(id!!)!!
