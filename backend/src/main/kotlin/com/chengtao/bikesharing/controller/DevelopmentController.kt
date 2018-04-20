@@ -20,7 +20,8 @@ class DevelopmentController {
   fun insetDevelopment(
     @RequestParam(name = "bike_id") bikeId: Int?,
     @RequestParam(name = "city") city: String?,
-    @RequestParam(name = "delivery_at") deliveryAt: String?
+    @RequestParam(name = "delivery_at") deliveryAt: String?,
+    @RequestParam(name = "delivery_count") deliveryCount: Int?
   ): Any? {
     return when {
       bikeId == null ->
@@ -35,6 +36,10 @@ class DevelopmentController {
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(APIError("missing parameter : delivery_at"))
+      deliveryCount != null && deliveryCount <= 0 ->
+        ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(APIError("parameter invalid : delivery_count"))
       BikeSQL.queryBikeById(bikeId) == null ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)

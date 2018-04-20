@@ -7,6 +7,7 @@ CREATE TABLE `development` (
   `bike_id` int(10) unsigned NOT NULL,
   `city` varchar(10) NOT NULL,
   `delivery_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`delivery_count` int(10) unsigned NOT NULL DEFAULT 0,
 
   PRIMARY KEY (`id`),
 

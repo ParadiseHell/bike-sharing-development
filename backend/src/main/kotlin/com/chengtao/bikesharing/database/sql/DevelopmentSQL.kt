@@ -63,7 +63,8 @@ object DevelopmentSQL : BaseSQL() {
                     updatedAt = it[DevelopmentTable.updatedAt].toDate(),
                     bikeId = it[DevelopmentTable.bikeId],
                     city = it[DevelopmentTable.city],
-                    deliveryAt = it[DevelopmentTable.deliveryAt].toDate()
+                    deliveryAt = it[DevelopmentTable.deliveryAt].toDate(),
+                    deliveryCount = it[DevelopmentTable.deliveryCount]
                 )
           }
     }
@@ -93,7 +94,8 @@ object DevelopmentSQL : BaseSQL() {
                     updatedAt = it[DevelopmentTable.updatedAt].toDate(),
                     bikeId = it[DevelopmentTable.bikeId],
                     city = it[DevelopmentTable.city],
-                    deliveryAt = it[DevelopmentTable.deliveryAt].toDate()
+                    deliveryAt = it[DevelopmentTable.deliveryAt].toDate(),
+                    deliveryCount = it[DevelopmentTable.deliveryCount]
                 )
             )
           }

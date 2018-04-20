@@ -7,10 +7,10 @@ import java.util.Date
  */
 data class Bike(
   var id: Int,
-  var name: String,
-  var foundedAt: Date? = null,
   var createdAt: Date,
-  var updateAt: Date
+  var updateAt: Date,
+  var name: String,
+  var foundedAt: Date? = null
 )
 
 /**
@@ -18,11 +18,12 @@ data class Bike(
  */
 data class Development(
   var id: Int,
+  var createdAt: Date,
+  var updatedAt: Date,
   var bikeId: Int,
   var city: String,
   var deliveryAt: Date,
-  var createdAt: Date,
-  var updatedAt: Date
+  var deliveryCount: Int? = 0
 )
 
 /**

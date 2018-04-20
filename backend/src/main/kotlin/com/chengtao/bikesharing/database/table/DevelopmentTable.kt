@@ -9,5 +9,6 @@ object DevelopmentTable : Table("development") {
 
   val bikeId = (integer("bike_id") references BikeTable.id)
   val city = varchar("city", 10)
-  val deliveryAt = date("delivery_at")
+  val deliveryAt = datetime("delivery_at")
+  val deliveryCount = integer("delivery_count").nullable()
 }
