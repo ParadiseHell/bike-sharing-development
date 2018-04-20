@@ -24,3 +24,8 @@ data class Development(
   var createdAt: Date,
   var updateAt: Date
 )
+
+/**
+ * 错误模型
+ */
+data class APIError(val error: String)
