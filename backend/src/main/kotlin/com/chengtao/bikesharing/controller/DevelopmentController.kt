@@ -55,7 +55,7 @@ class DevelopmentController {
               .status(HttpStatus.BAD_REQUEST)
               .body(APIError("parameter invalid : delivery_at"))
         } else {
-          DevelopmentSQL.insertDevelopment(bikeId, city, date)
+          DevelopmentSQL.insertDevelopment(bikeId, city, date, deliveryCount)
         }
       }
     }
