@@ -1,6 +1,7 @@
 package com.chengtao.bikesharing.controller
 
 import com.chengtao.bikesharing.Utils
+import com.chengtao.bikesharing.database.sql.BikeSQL
 import com.chengtao.bikesharing.database.sql.DevelopmentSQL
 import com.chengtao.bikesharing.model.APIError
 import com.chengtao.bikesharing.model.Development
@@ -34,6 +35,10 @@ class DevelopmentController {
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(APIError("missing parameter : delivery_at"))
+      BikeSQL.queryBikeById(bikeId) == null ->
+        ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(APIError("no such bike_id"))
       DevelopmentSQL.isExit(bikeId, city) ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
