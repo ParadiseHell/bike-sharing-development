@@ -22,7 +22,7 @@ data class Development(
   var city: String,
   var deliveryAt: Date,
   var createdAt: Date,
-  var updateAt: Date
+  var updatedAt: Date
 )
 
 /**
