@@ -2,6 +2,8 @@ package com.chengtao.bikesharing.controller
 
 import com.chengtao.bikesharing.Utils
 import com.chengtao.bikesharing.database.sql.BikeSQL
+import com.chengtao.bikesharing.extension.missingParameter
+import com.chengtao.bikesharing.extension.parameterInvalid
 import com.chengtao.bikesharing.model.Bike
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,6 +15,13 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class BikeController {
+  private class Parameter {
+    companion object {
+      const val name = "name"
+      const val foundedAt = "founded_at"
+    }
+  }
+
   /**
    * 获取所有共享单车
    */
@@ -37,24 +46,24 @@ class BikeController {
    */
   @PostMapping("bikes")
   fun insertBike(
-    @RequestParam(name = "name") name: String?,
-    @RequestParam(name = "foundedAt") foundedAt: String?
+    @RequestParam(name = Parameter.name) name: String?,
+    @RequestParam(name = Parameter.foundedAt) foundedAt: String?
   ): Any {
     return when {
       (name == null || name == "") ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(Error("missing parameter : name"))
+            .body(Error(Parameter.name.missingParameter()))
       BikeSQL.isBikeNameExist(name) ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(Error("name has been used"))
+            .body(Error("${Parameter.name} has been used"))
       else -> {
-        val date = Utils.rfc3999ToDate(foundedAt);
+        val date = Utils.rfc3339ToDate(foundedAt);
         if (foundedAt != null && date == null) {
           ResponseEntity
               .status(HttpStatus.BAD_REQUEST)
-              .body(Error("parameter invalid : foundedAt"))
+              .body(Error(Parameter.foundedAt.parameterInvalid()))
         } else {
           BikeSQL.insertBike(name, date)
         }

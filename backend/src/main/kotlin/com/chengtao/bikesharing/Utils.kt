@@ -6,12 +6,16 @@ import java.util.Date
 import java.util.TimeZone
 
 object Utils {
-  fun rfc3999ToDate(date: String?): Date? {
+  /**
+   * 字符串转换成时间
+   * 格式 yyyy-MM-dd
+   */
+  fun rfc3339ToDate(date: String?): Date? {
     return if (date == null || date == "") {
       null
     } else
       try {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val dateFormat = SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss'Z'")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         dateFormat.parse(date)
       } catch (e: ParseException) {
