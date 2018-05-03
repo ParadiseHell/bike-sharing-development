@@ -25,9 +25,11 @@ class BikeController {
    * 通过id获取单车
    */
   @GetMapping("/bikes/{id}")
-  fun getBikeById(@PathVariable(name = "id") id: Int): Any? {
-    return BikeSQL.queryBikeById(id) ?: ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-        Error("not found"))
+  fun getBikeById(
+    @PathVariable(name = "id") id: Int
+  ): Any {
+    return BikeSQL.queryBikeById(id) ?: ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(Error("not found"))
   }
 
   /**
@@ -37,14 +39,17 @@ class BikeController {
   fun insertBike(
     @RequestParam(name = "name") name: String?,
     @RequestParam(name = "founded_at") foundedAt: String?
-  ): Any? {
-    if (name == null) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-          .body(Error("missing parameter : name"))
+  ): Any {
+    return when {
+      name == null ->
+        ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(Error("missing parameter : name"))
+      BikeSQL.isBikeNameExist(name) ->
+        ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(Error("name has been used"))
+      else -> BikeSQL.insertBike(name, Utils.rfc3999ToDate(foundedAt))
     }
-    if (BikeSQL.isBikeNameExist(name)) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Error("name has been used"))
-    }
-    return BikeSQL.insertBike(name, Utils.rfc3999ToDate(foundedAt))
   }
 }

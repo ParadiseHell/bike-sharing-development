@@ -61,9 +61,10 @@ class DevelopmentController {
 
   @GetMapping("/developments")
   fun getBikeDevelopments(@RequestParam(value = "bike_id") bikeId: Int): Any {
-    if (BikeSQL.queryBikeById(bikeId) == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error("bike_id($bikeId) not exist"))
+    return if (BikeSQL.queryBikeById(bikeId) == null) {
+      ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error("bike_id($bikeId) not exist"))
+    } else {
+      DevelopmentSQL.queryDevelopmentsByBikeId(bikeId)
     }
-    return DevelopmentSQL.queryDevelopmentsByBikeId(bikeId)
   }
 }
