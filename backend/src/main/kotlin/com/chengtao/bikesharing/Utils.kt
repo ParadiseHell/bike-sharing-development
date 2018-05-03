@@ -15,8 +15,7 @@ object Utils {
       null
     } else
       try {
-        val dateFormat = SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss'Z'")
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val dateFormat = SimpleDateFormat("yyy-MM-dd'T'HH:mm:ssZ")
         dateFormat.parse(date)
       } catch (e: ParseException) {
         println("e : ${e.message}")
