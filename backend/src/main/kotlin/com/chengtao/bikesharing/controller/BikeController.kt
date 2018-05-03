@@ -38,10 +38,10 @@ class BikeController {
   @PostMapping("bikes")
   fun insertBike(
     @RequestParam(name = "name") name: String?,
-    @RequestParam(name = "founded_at") foundedAt: String?
+    @RequestParam(name = "foundedAt") foundedAt: String?
   ): Any {
     return when {
-      name == null ->
+      (name == null || name == "") ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(Error("missing parameter : name"))
@@ -49,7 +49,16 @@ class BikeController {
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(Error("name has been used"))
-      else -> BikeSQL.insertBike(name, Utils.rfc3999ToDate(foundedAt))
+      else -> {
+        val date = Utils.rfc3999ToDate(foundedAt);
+        if (foundedAt != null && date == null) {
+          ResponseEntity
+              .status(HttpStatus.BAD_REQUEST)
+              .body(Error("parameter invalid : foundedAt"))
+        } else {
+          BikeSQL.insertBike(name, date)
+        }
+      }
     }
   }
 }

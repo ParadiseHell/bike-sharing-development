@@ -16,16 +16,16 @@ class DevelopmentController {
 
   @PostMapping("/developments")
   fun insetDevelopment(
-    @RequestParam(name = "bike_id") bikeId: Int?,
+    @RequestParam(name = "bikeId") bikeId: Int?,
     @RequestParam(name = "city") city: String?,
-    @RequestParam(name = "delivery_at") deliveryAt: String?,
-    @RequestParam(name = "delivery_count") deliveryCount: Int?
+    @RequestParam(name = "deliveryAt") deliveryAt: String?,
+    @RequestParam(name = "deliveryCount") deliveryCount: Int?
   ): Any? {
     return when {
       bikeId == null ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(Error("missing parameter : bike_id"))
+            .body(Error("missing parameter : bikeId"))
       city == null ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
@@ -33,15 +33,15 @@ class DevelopmentController {
       deliveryAt == null ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(Error("missing parameter : delivery_at"))
+            .body(Error("missing parameter : deliveryAt"))
       deliveryCount != null && deliveryCount <= 0 ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(Error("parameter invalid : delivery_count"))
+            .body(Error("parameter invalid : deliveryCount"))
       BikeSQL.queryBikeById(bikeId) == null ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(Error("no such bike_id"))
+            .body(Error("no such bikeId"))
       DevelopmentSQL.isExit(bikeId, city) ->
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
@@ -51,7 +51,7 @@ class DevelopmentController {
         if (date == null) {
           ResponseEntity
               .status(HttpStatus.BAD_REQUEST)
-              .body(Error("parameter invalid : delivery_at"))
+              .body(Error("parameter invalid : deliveryAt"))
         } else {
           DevelopmentSQL.insertDevelopment(bikeId, city, date, deliveryCount)
         }
@@ -60,9 +60,9 @@ class DevelopmentController {
   }
 
   @GetMapping("/developments")
-  fun getBikeDevelopments(@RequestParam(value = "bike_id") bikeId: Int): Any {
+  fun getBikeDevelopments(@RequestParam(value = "bikeId") bikeId: Int): Any {
     return if (BikeSQL.queryBikeById(bikeId) == null) {
-      ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error("bike_id($bikeId) not exist"))
+      ResponseEntity.status(HttpStatus.NOT_FOUND).body(Error("bikeId($bikeId) not exist"))
     } else {
       DevelopmentSQL.queryDevelopmentsByBikeId(bikeId)
     }

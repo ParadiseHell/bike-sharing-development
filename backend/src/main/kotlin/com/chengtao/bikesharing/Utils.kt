@@ -7,7 +7,7 @@ import java.util.TimeZone
 
 object Utils {
   fun rfc3999ToDate(date: String?): Date? {
-    return if (date == null) {
+    return if (date == null || date == "") {
       null
     } else
       try {
