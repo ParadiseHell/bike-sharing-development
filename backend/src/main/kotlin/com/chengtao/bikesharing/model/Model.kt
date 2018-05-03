@@ -29,4 +29,4 @@ data class Development(
 /**
  * 错误模型
  */
-data class APIError(val error: String)
+data class Error(val error: String)

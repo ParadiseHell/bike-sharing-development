@@ -53,7 +53,7 @@ object DevelopmentSQL : BaseSQL() {
   /**
    * 通过id查询发展
    */
-  fun queryDevelopmentById(bikeId: Int): Development? {
+  private fun queryDevelopmentById(bikeId: Int): Development? {
     var development: Development? = null
     connectDataBase()
     transaction {
