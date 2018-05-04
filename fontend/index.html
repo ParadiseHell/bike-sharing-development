@@ -14,25 +14,42 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.0/vue-resource.js"></script>
 	</head>
 	<body>
-		<div id="app">
-			<h1>{{ title }}</h1>
+		<div class="container" id="app">
+			<h1 class="center">{{ title }}</h1>
 			<ul>
-				<li></li>
+				<li class="text-primary" v-for="bike in bikes">
+					{{bike.name}}
+					<ul>
+						<li class="text-secondary">名称 : {{bike.name}}</li>
+						<li class="text-secondary">成立时间 : {{bike.founded_at}}</li>
+					</ul>
+				</li>
 			</ul>
 		</div>
 	</body>
 	<script>
-		new Vue({
+		var app = new Vue({
 			el : '#app',
 			data : {
-				title : "共享单车区域发展变化"	
+				title : "共享单车区域发展变化",
+				bikes : []
+			},
+			mounted : function() {
+				this
+					.$http
+					.get('http://localhost:9999/bikes')
+					.then(
+							response => {
+								if(response.ok){
+									response.json().then(
+										data => {
+											this.$data.bikes = data; 
+										}		
+									);
+								}
+							}
+					);
 			}
 		})
-	// GET /someUrl
-	Vue.http.get('http://localhost:9999/bikes').then(response => {
-		console.log(response.json());
-	}, response => {
-		console.log(response);
-	});
 	</script>
 </html>
