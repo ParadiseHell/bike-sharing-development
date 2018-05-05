@@ -6,11 +6,11 @@ import requests
 createBikeAPI="http://localhost:9999/bikes"
 
 #ofo小黄车
-ofoPlayload = {'name':'ofo小黄车','founded_at':'2015-03-26T+0800'}
+ofoPlayload = {'name':'ofo小黄车','founded_at':'2015-03-25T16:00:00Z'}
 ofoCreateReequest = requests.post(createBikeAPI,ofoPlayload);
 print(ofoCreateReequest.json())
 
 #摩拜单车
-mobikePlayload = {'name':'摩拜单车','founded_at':'2015-01-27T+0800'}
+mobikePlayload = {'name':'摩拜单车','founded_at':'2015-01-26T16:00:00Z'}
 mobikeCreateReequest = requests.post(createBikeAPI,mobikePlayload);
 print(mobikeCreateReequest.json())
