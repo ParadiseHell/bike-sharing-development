@@ -1,10 +1,12 @@
-# idea
-.idea
+# idae
+build/
+.gradle/
+.idea/
+out/
 
-# build
-build
-out
+# node
+node_modules/
 
-#gradle
-.gradle
-
+# vim
+*.swp
+*.swo
