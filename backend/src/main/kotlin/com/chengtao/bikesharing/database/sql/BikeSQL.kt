@@ -10,15 +10,16 @@ import org.joda.time.DateTime
 import java.util.Date
 
 object BikeSQL : BaseSQL() {
-  fun insertBike(bikeName: String, bikeFoundedAt: Date? = null): Bike {
+  fun insertBike(name: String, introduction: String, foundedAt: Date? = null): Bike {
     connectDataBase()
     var id: Int? = -1
     transaction {
       id = BikeTable
           .insert {
-            it[name] = bikeName
-            if (bikeFoundedAt != null) {
-              it[foundedAt] = DateTime(bikeFoundedAt)
+            it[this.name] = name
+            it[this.introduction] = introduction
+            if (foundedAt != null) {
+              it[this.foundedAt] = DateTime(foundedAt)
             }
           } get BikeTable.id
     }
@@ -38,6 +39,7 @@ object BikeSQL : BaseSQL() {
                     createdAt = it[BikeTable.createdAt].toDate(),
                     updateAt = it[BikeTable.updatedAt].toDate(),
                     name = it[BikeTable.name],
+                    introduction = it[BikeTable.introduction],
                     foundedAt = it[BikeTable.foundedAt]?.toDate()
                 )
             )
@@ -63,6 +65,7 @@ object BikeSQL : BaseSQL() {
                 createdAt = it[BikeTable.createdAt].toDate(),
                 updateAt = it[BikeTable.updatedAt].toDate(),
                 name = it[BikeTable.name],
+                introduction = it[BikeTable.introduction],
                 foundedAt = it[BikeTable.foundedAt]?.toDate()
             )
           }

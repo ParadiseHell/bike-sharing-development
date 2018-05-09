@@ -10,6 +10,7 @@ data class Bike(
   var createdAt: Date,
   var updateAt: Date,
   var name: String,
+  var introduction: String,
   var foundedAt: Date? = null
 )
 

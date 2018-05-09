@@ -18,6 +18,7 @@ class BikeController {
   private class Parameter {
     companion object {
       const val name = "name"
+      const val introduction = "introduction"
       const val foundedAt = "founded_at"
     }
   }
@@ -47,6 +48,7 @@ class BikeController {
   @PostMapping("bikes")
   fun insertBike(
     @RequestParam(name = Parameter.name) name: String?,
+    @RequestParam(name = Parameter.introduction) introduction: String?,
     @RequestParam(name = Parameter.foundedAt) foundedAt: String?
   ): Any {
     return when {
@@ -58,6 +60,10 @@ class BikeController {
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(Error("${Parameter.name} has been used"))
+      (introduction == null || introduction == "") ->
+        ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(Error(Parameter.introduction.missingParameter()))
       else -> {
         val date = Utils.rfc3339ToDate(foundedAt);
         if (foundedAt != null && date == null) {
@@ -65,7 +71,7 @@ class BikeController {
               .status(HttpStatus.BAD_REQUEST)
               .body(Error(Parameter.foundedAt.parameterInvalid()))
         } else {
-          BikeSQL.insertBike(name, date)
+          BikeSQL.insertBike(name, introduction, date)
         }
       }
     }

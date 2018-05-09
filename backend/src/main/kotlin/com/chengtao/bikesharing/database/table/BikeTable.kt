@@ -8,5 +8,6 @@ object BikeTable : Table(name = "bike") {
   val updatedAt = datetime("updated_at")
 
   val name = varchar("name", 20)
+  val introduction = varchar("introduction", 500)
   val foundedAt = datetime("founded_at").nullable()
 }
