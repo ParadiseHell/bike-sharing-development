@@ -4,6 +4,7 @@
 			<li v-for="bike in obtainList">
 				{{ bike.name }}
 				<ul>
+					<li>简介: {{ bike.introduction }}</li>
 					<li>成立时间: {{ bike.founded_at }}</li>
 				</ul>
 			</li>
