@@ -44,8 +44,8 @@ span{
 </style>
 
 <script>
-import particlesJS from './ParticlesJS'
-
+import particlesJS from './ParticlesJS';
+require('pace-js');
 export default {
 	name: 'Index',
 	components : {
