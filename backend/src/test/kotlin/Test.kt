@@ -1,15 +1,14 @@
-import java.text.SimpleDateFormat
-import java.util.Calendar
+import com.chengtao.bikesharing.Utils
 
 fun main(args: Array<String>) {
-  dateTest()
+  test()
 }
 
-fun dateTest() {
-  val dateString = "2016-08-01T00:00:00+0800";
-  val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-  val date = dateFormat.parse(dateString)
-  val calendar = Calendar.getInstance()
-  calendar.time = date
-  println("date : $dateString time-zone : ${calendar.timeZone}")
+fun test() {
+  val parametersMap = LinkedHashMap<String, String>()
+  parametersMap["address"] = "北京"
+  parametersMap["output"] = "json"
+  parametersMap["ak"] = "VlLIUSFowxeff3qcgZi55h4q0asEkKQR"
+  val sn = Utils.generateSn(parametersMap)
+  println(sn)
 }
