@@ -4,39 +4,42 @@
 		<b-container class="bike-list">
 			<b-row>
 				<b-col 
-					lg="4"
-					offset-lg="4"
-					md="8"
-					offset-md="2"
-					sm="10"
-					offset-sm="1"
-					v-for="bike in obtainList" :key="bike.id">
+								 lg="4"
+								 offset-lg="4"
+								 md="8"
+								 offset-md="2"
+								 sm="10"
+								 offset-sm="1"
+								 v-for="bike in obtainList" :key="bike.id">
 					<b-card
 						v-bind:title="bike.name"
 						class="mb-4"
 						v-bind:style="{
-							'border-color': bike.color, 
-							color: bike.color
+						'border-color': bike.color, 
+						color: bike.color
 						}">
 						<p class="card-text">	
-						成立时间: {{ bike.founded_at }}
+						{{ bike.display_founded_at }}
 						</p>
 						<p class="card-text">	
 						{{ bike.introduction }}
 						</p>
 						<div class="text-center">
-							<b-button 
-								 class="btn-transparent"
-								 v-bind:style="{
-									'border-color': bike.color,
-									'color': bike.color
-									}"
-								 v-on:mouseover="changeButtonColor(bike.color, $event)"
-								 v-on:mouseleave="resetButtonColor"
-								 v-bind:to="{name: 'BikeDetail', params: { bikeId: bike.id }}"
+							<router-link
+								v-bind:to="{name: 'BikeDetail', params: { bikeId: bike.id }}">
+								<b-button 
+								class="m-btn"
+								v-bind:style="{
+								'border-color': bike.color,
+								'color': bike.color,
+								}"
+								v-on:mouseover="changeButtonColor(bike.color, $event)"
+								v-on:mouseleave="resetButtonColor(bike.color, $event)"
+								variant="outline-light"
 								>
-								查看发展变化
-							</b-button>
+								{{ detailDevlopment }}	
+								</b-button>
+							</router-link>
 						</div>
 					</b-card>
 				</b-col>
@@ -58,12 +61,9 @@
 	padding-bottom: 50px;
 	left: 50%;
 	transform: translateX(-50%);
-  overflow: auto;
+	overflow: auto;
 }
 .card{
-	background-color: transparent;
-}
-.btn-transparent{
 	background-color: transparent;
 }
 </style>
@@ -79,7 +79,8 @@ export default {
 	},
 	data () {
 		return {
-			bikes:[]
+			bikes: [],
+			detailDevlopment: "查看发展变化"
 		}
 	},
 	mounted(){
@@ -95,7 +96,8 @@ export default {
 		obtainList: function(){
 			return this.bikes.map(function(bike){
 				let foundedAtUTCDate = new Date(bike.founded_at);
-				bike.founded_at = 
+				bike.display_founded_at = 
+					"成立时间 : " + 
 					foundedAtUTCDate.getFullYear() + " 年 "+
 					(foundedAtUTCDate.getMonth() + 1) + " 月 "+
 					foundedAtUTCDate.getDate() + " 日";
@@ -112,9 +114,11 @@ export default {
 	methods: {
 		changeButtonColor: function(color, event){
 			event.target.style.backgroundColor = color;
+			event.target.style.color = "#fff";
 		},	
-		resetButtonColor: function(event){
+		resetButtonColor: function(color, event){
 			event.target.style.backgroundColor = "transparent";
+			event.target.style.color = color;
 		}	
 	}
 }
