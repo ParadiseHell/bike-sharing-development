@@ -1,17 +1,35 @@
 <template>
-	<div>{{ msg }}</div>
+	<div>{{ developmts }}</div>
 </template>
 
 <script>
+import API from '../API';
+
 export default {
-  name: 'HelloWorld',
+  name: 'BikeDetail',
   data () {
     return {
-      msg: 'Bike Sharing Development'
+			developmts : []
     }
   },
 	mounted(){
-		this.msg = 'I changed';
+		this
+			.$http
+			.get(
+				API.developments,
+				{
+					params: {
+						bike_id: this.$route.params.bikeId
+					}
+				}	
+			)
+			.then( response => {
+				response.json().then(data => {
+					this.developmts = data;
+				});	
+			}, response => {
+				//TODO error	
+			});
 	}
 }
 </script>
