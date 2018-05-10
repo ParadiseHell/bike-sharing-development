@@ -13,7 +13,7 @@
 					 class="mt-3"
 					 variant="outline-light"
 					 size="lg" 
-					 to="bikes"
+					 to="/bikes"
 					 >
 					 {{ detail }}
 				</b-btn>

@@ -3,7 +3,14 @@
 		<particlesJS/>
 		<b-container class="bike-list">
 			<b-row>
-				<b-col cols="6" offset="3" v-for="bike in obtainList" :key="bike.id">
+				<b-col 
+					lg="4"
+					offset-lg="4"
+					md="8"
+					offset-md="2"
+					sm="10"
+					offset-sm="1"
+					v-for="bike in obtainList" :key="bike.id">
 					<b-card
 						v-bind:title="bike.name"
 						class="mb-4"
@@ -19,11 +26,14 @@
 						</p>
 						<div class="text-center">
 							<b-button 
+								 class="btn-transparent"
 								 v-bind:style="{
-									'border-color': bike.color
+									'border-color': bike.color,
+									'color': bike.color
 									}"
 								 v-on:mouseover="changeButtonColor(bike.color, $event)"
 								 v-on:mouseleave="resetButtonColor"
+								 v-bind:to="{name: 'BikeDetail', params: { bikeId: bike.id }}"
 								>
 								查看发展变化
 							</b-button>
@@ -41,15 +51,19 @@
 	height: 100%;
 }
 .bike-list{
+	max-height: 100%;
 	position: absolute;
-	top: 30px;
+	top: 0px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 	left: 50%;
 	transform: translateX(-50%);
+  overflow: auto;
 }
 .card{
 	background-color: transparent;
 }
-button{
+.btn-transparent{
 	background-color: transparent;
 }
 </style>
