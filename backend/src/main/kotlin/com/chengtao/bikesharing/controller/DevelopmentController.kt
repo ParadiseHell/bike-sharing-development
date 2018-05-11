@@ -6,6 +6,8 @@ import com.chengtao.bikesharing.database.sql.DevelopmentSQL
 import com.chengtao.bikesharing.extension.missingParameter
 import com.chengtao.bikesharing.extension.parameterInvalid
 import com.chengtao.bikesharing.model.Error
+import com.chengtao.bikesharing.request.BaiduMapAPI
+import com.chengtao.bikesharing.request.RetrofitSingleton
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -67,7 +69,28 @@ class DevelopmentController {
               .status(HttpStatus.BAD_REQUEST)
               .body(Error(Parameter.deliveryAt.parameterInvalid()))
         } else {
-          DevelopmentSQL.insertDevelopment(bikeId, city, date, deliveryCount)
+          //通过百度 API 获取城市的经纬度
+          val sn = Utils.generateSn(BaiduMapAPI.GEOCODER_API, city) ?: return ResponseEntity
+              .status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(Error(HttpStatus.INTERNAL_SERVER_ERROR.name))
+          //
+          val baiduMapAPI = RetrofitSingleton
+              .instance
+              .retrofit
+              .create(BaiduMapAPI::class.java)
+          val geoCodeCall = baiduMapAPI.getGeoCode(address = city, sn = sn)
+          val geoCode = geoCodeCall.execute().body() ?: return ResponseEntity
+              .status(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(Error(HttpStatus.INTERNAL_SERVER_ERROR.name))
+          //
+          return DevelopmentSQL.insertDevelopment(
+              bikeId = bikeId,
+              city = city,
+              deliveryAt = date,
+              deliveryCount = deliveryCount,
+              locationLatitude = geoCode.location.latitude,
+              locationLongitude = geoCode.location.longitude
+          )
         }
       }
     }

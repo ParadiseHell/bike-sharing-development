@@ -11,4 +11,6 @@ object DevelopmentTable : Table("development") {
   val city = varchar("city", 10)
   val deliveryAt = datetime("delivery_at")
   val deliveryCount = integer("delivery_count").nullable()
+  val locationLatitude = decimal("location_latitude", 9, 6)
+  val locationLongitude = decimal("location_longitude", 9, 6)
 }

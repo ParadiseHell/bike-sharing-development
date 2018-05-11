@@ -2,11 +2,13 @@ package com.chengtao.bikesharing.database.sql
 
 import com.chengtao.bikesharing.database.table.DevelopmentTable
 import com.chengtao.bikesharing.model.Development
+import com.chengtao.bikesharing.model.Location
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import java.math.BigDecimal
 import java.util.Date
 
 object DevelopmentSQL : BaseSQL() {
@@ -18,17 +20,21 @@ object DevelopmentSQL : BaseSQL() {
     bikeId: Int,
     city: String,
     deliveryAt: Date,
-    deliveryCount: Int?
+    deliveryCount: Int?,
+    locationLatitude: Float,
+    locationLongitude: Float
   ): Development {
     connectDataBase()
     var id: Int? = -1
     transaction {
       id = DevelopmentTable
           .insert {
-            it[DevelopmentTable.bikeId] = bikeId
-            it[DevelopmentTable.city] = city
-            it[DevelopmentTable.deliveryAt] = DateTime(deliveryAt)
-            it[DevelopmentTable.deliveryCount] = deliveryCount
+            it[this.bikeId] = bikeId
+            it[this.city] = city
+            it[this.deliveryAt] = DateTime(deliveryAt)
+            it[this.deliveryCount] = deliveryCount
+            it[this.locationLatitude] = BigDecimal(locationLatitude.toDouble())
+            it[this.locationLongitude] = BigDecimal(locationLongitude.toDouble())
           } get DevelopmentTable.id
     }
     return queryDevelopmentById(id!!)!!
@@ -70,7 +76,11 @@ object DevelopmentSQL : BaseSQL() {
                     bikeId = it[DevelopmentTable.bikeId],
                     city = it[DevelopmentTable.city],
                     deliveryAt = it[DevelopmentTable.deliveryAt].toDate(),
-                    deliveryCount = it[DevelopmentTable.deliveryCount]
+                    deliveryCount = it[DevelopmentTable.deliveryCount],
+                    location = Location(
+                        latitude = it[DevelopmentTable.locationLatitude].toFloat(),
+                        longitude = it[DevelopmentTable.locationLongitude].toFloat()
+                    )
                 )
           }
     }
@@ -101,7 +111,11 @@ object DevelopmentSQL : BaseSQL() {
                     bikeId = it[DevelopmentTable.bikeId],
                     city = it[DevelopmentTable.city],
                     deliveryAt = it[DevelopmentTable.deliveryAt].toDate(),
-                    deliveryCount = it[DevelopmentTable.deliveryCount]
+                    deliveryCount = it[DevelopmentTable.deliveryCount],
+                    location = Location(
+                        latitude = it[DevelopmentTable.locationLatitude].toFloat(),
+                        longitude = it[DevelopmentTable.locationLongitude].toFloat()
+                    )
                 )
             )
           }

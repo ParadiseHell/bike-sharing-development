@@ -4,6 +4,7 @@ buildscript {
   ext.spring_boot_version = '2.0.1.RELEASE'
   ext.mysql_connector_version = '8.0.11'
   ext.exposed_version = "0.10.2"
+  ext.retrofit_version = "2.4.0"
 
   repositories {
     mavenCentral()
@@ -45,7 +46,8 @@ dependencies {
   //exposed
   implementation "org.jetbrains.exposed:exposed:$exposed_version"
   //retrofit
-  implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+  implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+  implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
   //test
   testImplementation group: 'junit', name: 'junit', version: '4.11'
 }

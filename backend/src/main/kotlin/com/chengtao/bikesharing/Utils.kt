@@ -1,5 +1,6 @@
 package com.chengtao.bikesharing
 
+import com.chengtao.bikesharing.request.BaiduMapAPI
 import java.lang.StringBuilder
 import java.net.URLEncoder
 import java.text.ParseException
@@ -23,8 +24,14 @@ object Utils {
       }
   }
 
-  fun generateSn(parametersMap: Map<String, String>): String? {
+  fun generateSn(path: String, address: String): String? {
     val builder = StringBuilder()
+    //
+    val parametersMap = LinkedHashMap<String, String>()
+    parametersMap["address"] = address
+    parametersMap["output"] = BaiduMapAPI.OUTPUT
+    parametersMap["ak"] = BaiduMapAPI.AK
+    //
     for (entry in parametersMap.entries) {
       println("key : " + entry.key + " - value : " + entry.value)
       builder.append(entry.key + "=")
@@ -38,8 +45,9 @@ object Utils {
     if (parametersString.isEmpty()) {
       return null
     }
-    var wholeString = "/geocoder/v2/?${parametersString}aCWYa6ndtHzc9VD5Bu6Xeqsl8S4kUk7m"
-    wholeString = URLEncoder.encode(wholeString,"UTF-8")
+    var wholeString = "$path/?$parametersString${BaiduMapAPI.SK}"
+    println("wholeString : $wholeString")
+    wholeString = URLEncoder.encode(wholeString, "UTF-8")
     println("wholeString : $wholeString")
     return md5(wholeString)
   }

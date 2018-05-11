@@ -1,14 +1,11 @@
 import com.chengtao.bikesharing.Utils
+import com.chengtao.bikesharing.request.BaiduMapAPI
 
 fun main(args: Array<String>) {
   test()
 }
 
 fun test() {
-  val parametersMap = LinkedHashMap<String, String>()
-  parametersMap["address"] = "北京"
-  parametersMap["output"] = "json"
-  parametersMap["ak"] = "VlLIUSFowxeff3qcgZi55h4q0asEkKQR"
-  val sn = Utils.generateSn(parametersMap)
+  val sn = Utils.generateSn(BaiduMapAPI.GEOCODER_API, "北京")
   println(sn)
 }
