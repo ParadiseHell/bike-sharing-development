@@ -2,8 +2,8 @@
 	<div id="bike-detail"></div>
 </template>
 
-<style>
-#bikes-detail{
+<style scoped>
+#bike-detail{
 	height: 100%;
 	width: 100%;
 }
@@ -37,10 +37,10 @@ export default {
 					require('echarts/extension/bmap/bmap');
 					var myChart = echarts.init(document.getElementById('bike-detail'));
 					var data = [
-						{name: '海门', value: 9},
-						{name: '鄂尔多斯', value: 12},
-						{name: '招远', value: 12},
-						{name: '舟山', value: 12}	
+						{name: '海门', value: 100},
+						{name: '鄂尔多斯', value: 80},
+						{name: '招远', value: 50},
+						{name: '舟山', value: 80}	
 					]
 					var geoCoordMap = {
 						'海门':[121.15,31.89],
