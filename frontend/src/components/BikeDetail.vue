@@ -19,7 +19,8 @@ export default {
 	name: 'BikeDetail',
 	data () {
 		return {
-			beijingLocation : [116.403119,39.914714]
+			beijingLocation : [116.403119,39.914714],
+
 		}
 	},
 	mounted(){
@@ -40,12 +41,15 @@ export default {
 					var data = [];
 					var geoCoordMap = {};
 					developmts.forEach(developmt =>{
-						data.push({name: developmt.city, value: 300});
-						geoCoordMap[developmt.city] = [developmt.location.longitude,developmt.location.latitude];
+						data.push({name: developmt.city, value: developmt.delivery_count});
+						geoCoordMap[developmt.city] = [
+							developmt.location.longitude,
+							developmt.location.latitude
+						];
 					});
 					var option = {
 						title: {
-							text: this.$route.query.bikeName + " 发展变化",
+							text: this.$route.query.bikeName + " - 发展变化",
 							left: 'center'
 						},
 						tooltip : {
@@ -63,7 +67,7 @@ export default {
 								coordinateSystem: 'bmap',
 								data: this.convertData(data, geoCoordMap),
 								symbolSize: function (val) {
-									return val[2] / 10;
+									return val[2] / 4000;
 								},
 								showEffectOn: 'render',
 								rippleEffect: {
