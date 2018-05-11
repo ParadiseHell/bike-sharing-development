@@ -59,13 +59,13 @@ object DevelopmentSQL : BaseSQL() {
   /**
    * 通过id查询发展
    */
-  private fun queryDevelopmentById(bikeId: Int): Development? {
+  private fun queryDevelopmentById(id: Int): Development? {
     var development: Development? = null
     connectDataBase()
     transaction {
       DevelopmentTable
           .select {
-            DevelopmentTable.bikeId eq bikeId
+            DevelopmentTable.id eq id
           }
           .forEach {
             development =
