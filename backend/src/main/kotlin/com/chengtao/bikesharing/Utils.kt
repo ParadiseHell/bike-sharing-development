@@ -33,7 +33,6 @@ object Utils {
     parametersMap["ak"] = BaiduMapAPI.AK
     //
     for (entry in parametersMap.entries) {
-      println("key : " + entry.key + " - value : " + entry.value)
       builder.append(entry.key + "=")
       builder.append(URLEncoder.encode(entry.value, "UTF-8") + "&")
     }
@@ -41,14 +40,11 @@ object Utils {
       builder.deleteCharAt(builder.length - 1)
     }
     val parametersString = builder.toString()
-    println("parametersString : $parametersString ")
     if (parametersString.isEmpty()) {
       return null
     }
-    var wholeString = "$path/?$parametersString${BaiduMapAPI.SK}"
-    println("wholeString : $wholeString")
+    var wholeString = "$path?$parametersString${BaiduMapAPI.SK}"
     wholeString = URLEncoder.encode(wholeString, "UTF-8")
-    println("wholeString : $wholeString")
     return md5(wholeString)
   }
 

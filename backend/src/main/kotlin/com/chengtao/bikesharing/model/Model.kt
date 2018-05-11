@@ -40,14 +40,21 @@ data class Location(
 )
 
 /**
- * 百度地图地理编码返回实体
+ * 地址编码结果
  */
-data class GeoCode(
-  var status: Int,
+data class GeoCodeResult(
   var location: Location,
   var precise: Int,
   var confidence: Int,
   var level: String
+)
+
+/**
+ * 百度地图地理编码返回实体
+ */
+data class GeoCode(
+  var status: Int,
+  var result: GeoCodeResult
 )
 
 /**

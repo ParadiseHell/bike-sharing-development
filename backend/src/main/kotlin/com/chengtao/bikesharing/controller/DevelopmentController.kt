@@ -76,6 +76,7 @@ class DevelopmentController {
           val sn = Utils.generateSn(BaiduMapAPI.GEOCODER_API, city) ?: return ResponseEntity
               .status(HttpStatus.INTERNAL_SERVER_ERROR)
               .body(Error(HttpStatus.INTERNAL_SERVER_ERROR.name))
+          println("sn : $sn")
           //网络请求
           val baiduMapAPI = RetrofitSingleton
               .instance
@@ -83,9 +84,12 @@ class DevelopmentController {
               .create(BaiduMapAPI::class.java)
           val geoCodeCall = baiduMapAPI.getGeoCode(address = city, sn = sn)
           //如果返回实体为空,服务器异常
-          val geoCode = geoCodeCall.execute().body() ?: return ResponseEntity
+          val response = geoCodeCall.execute()
+          println("response : $response")
+          val geoCode = response.body() ?: return ResponseEntity
               .status(HttpStatus.INTERNAL_SERVER_ERROR)
               .body(Error(HttpStatus.INTERNAL_SERVER_ERROR.name))
+          println("geoCode : $geoCode")
           //如果 status != 0,服务器异常
           if (geoCode.status != 0) {
             return ResponseEntity
@@ -98,8 +102,8 @@ class DevelopmentController {
               city = city,
               deliveryAt = date,
               deliveryCount = deliveryCount,
-              locationLatitude = geoCode.location.latitude,
-              locationLongitude = geoCode.location.longitude
+              locationLatitude = geoCode.result.location.latitude,
+              locationLongitude = geoCode.result.location.longitude
           )
         }
       }

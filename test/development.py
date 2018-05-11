@@ -54,5 +54,7 @@ if success == 1:
                     developmentPlaylod['delivery_count'] = deliveryCount;
                     #
                     createDevlopmentRequest = requests.post(createDevlopmentAPI,developmentPlaylod);
+                    print(createDevlopmentRequest.json());
+                    break;
     except IOError:
         print("open file failed");

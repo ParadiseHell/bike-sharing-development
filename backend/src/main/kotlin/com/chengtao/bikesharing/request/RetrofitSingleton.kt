@@ -1,5 +1,8 @@
 package com.chengtao.bikesharing.request
 
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -16,9 +19,24 @@ class RetrofitSingleton private constructor() {
   }
 
   init {
+    val logging = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
+      println(message)
+    })
+    logging.level = HttpLoggingInterceptor.Level.BODY
+    val okHttpClient = OkHttpClient
+        .Builder()
+        .addInterceptor(logging)
+        .build()
     retrofit = Retrofit.Builder()
         .baseUrl(Holder.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .addConverterFactory(
+            GsonConverterFactory.create(
+                GsonBuilder()
+                    .setLenient()
+                    .create()
+            )
+        )
         .build()
   }
 }
