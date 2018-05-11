@@ -11,11 +11,15 @@
 
 <script>
 import API from '../API';
+//引入相关插件
+var echarts = require('echarts');
+require('echarts/extension/bmap/bmap');
+
 export default {
 	name: 'BikeDetail',
 	data () {
 		return {
-			developmts : []
+			beijingLocation : [116.403119,39.914714]
 		}
 	},
 	mounted(){
@@ -30,170 +34,34 @@ export default {
 				}	
 			)
 			.then( response => {
-				response.json().then(data => {
-					this.developmts = data;
+				response.json().then(developmts => {
 					//
-					var echarts = require('echarts');
-					require('echarts/extension/bmap/bmap');
-					var myChart = echarts.init(document.getElementById('bike-detail'));
-					var data = [
-						{name: '海门', value: 100},
-						{name: '鄂尔多斯', value: 80},
-						{name: '招远', value: 50},
-						{name: '舟山', value: 80}	
-					]
-					var geoCoordMap = {
-						'海门':[121.15,31.89],
-						'鄂尔多斯':[109.781327,39.608266],
-						'招远':[120.38,37.35],
-						'舟山':[122.207216,29.985295]
-					}
+					var bikeDevelopmentChart = echarts.init(document.getElementById('bike-detail'));
+					var data = [];
+					var geoCoordMap = {};
+					developmts.forEach(developmt =>{
+						data.push({name: developmt.city, value: 300});
+						geoCoordMap[developmt.city] = [developmt.location.longitude,developmt.location.latitude];
+					});
 					var option = {
 						title: {
-							text: '全国主要城市空气质量 - 百度地图',
-							subtext: 'data from PM25.in',
-							sublink: 'http://www.pm25.in',
+							text: this.$route.query.bikeName + " 发展变化",
 							left: 'center'
 						},
 						tooltip : {
 							trigger: 'item'
 						},
 						bmap: {
-							center: [104.114129, 37.550339],
-							zoom: 5,
+							center: this.beijingLocation,
+							zoom: 6,
 							roam: true,
-							mapStyle: {
-								styleJson: [{
-									'featureType': 'water',
-									'elementType': 'all',
-									'stylers': {
-										'color': '#d1d1d1'
-									}
-								}, {
-									'featureType': 'land',
-									'elementType': 'all',
-									'stylers': {
-										'color': '#f3f3f3'
-									}
-								}, {
-									'featureType': 'railway',
-									'elementType': 'all',
-									'stylers': {
-										'visibility': 'off'
-									}
-								}, {
-									'featureType': 'highway',
-									'elementType': 'all',
-									'stylers': {
-										'color': '#fdfdfd'
-									}
-								}, {
-									'featureType': 'highway',
-									'elementType': 'labels',
-									'stylers': {
-										'visibility': 'off'
-									}
-								}, {
-									'featureType': 'arterial',
-									'elementType': 'geometry',
-									'stylers': {
-										'color': '#fefefe'
-									}
-								}, {
-									'featureType': 'arterial',
-									'elementType': 'geometry.fill',
-									'stylers': {
-										'color': '#fefefe'
-									}
-								}, {
-									'featureType': 'poi',
-									'elementType': 'all',
-									'stylers': {
-										'visibility': 'off'
-									}
-								}, {
-									'featureType': 'green',
-									'elementType': 'all',
-									'stylers': {
-										'visibility': 'off'
-									}
-								}, {
-									'featureType': 'subway',
-									'elementType': 'all',
-									'stylers': {
-										'visibility': 'off'
-									}
-								}, {
-									'featureType': 'manmade',
-									'elementType': 'all',
-									'stylers': {
-										'color': '#d1d1d1'
-									}
-								}, {
-									'featureType': 'local',
-									'elementType': 'all',
-									'stylers': {
-										'color': '#d1d1d1'
-									}
-								}, {
-									'featureType': 'arterial',
-									'elementType': 'labels',
-									'stylers': {
-										'visibility': 'off'
-									}
-								}, {
-									'featureType': 'boundary',
-									'elementType': 'all',
-									'stylers': {
-										'color': '#fefefe'
-									}
-								}, {
-									'featureType': 'building',
-									'elementType': 'all',
-									'stylers': {
-										'color': '#d1d1d1'
-									}
-								}, {
-									'featureType': 'label',
-									'elementType': 'labels.text.fill',
-									'stylers': {
-										'color': '#999999'
-									}
-								}]
-							}
 						},
 						series : [
 							{
-								name: 'pm2.5',
-								type: 'scatter',
-								coordinateSystem: 'bmap',
-								data:  this.convertData(data, geoCoordMap),
-								symbolSize: function (val) {
-									return val[2] / 10;
-								},
-								label: {
-									normal: {
-										formatter: '{b}',
-										position: 'right',
-										show: false
-									},
-									emphasis: {
-										show: true
-									}
-								},
-								itemStyle: {
-									normal: {
-										color: 'purple'
-									}
-								}
-							},
-							{
-								name: 'Top 5',
+								name: this.$route.query.bikeName,
 								type: 'effectScatter',
 								coordinateSystem: 'bmap',
-								data: this.convertData(data.sort(function (a, b) {
-									return b.value - a.value;
-								}).slice(0, 6), geoCoordMap),
+								data: this.convertData(data, geoCoordMap),
 								symbolSize: function (val) {
 									return val[2] / 10;
 								},
@@ -211,7 +79,7 @@ export default {
 								},
 								itemStyle: {
 									normal: {
-										color: 'purple',
+										color: this.$route.query.color,
 										shadowBlur: 10,
 										shadowColor: '#333'
 									}
@@ -220,14 +88,15 @@ export default {
 							}
 						]
 					}
-					myChart.setOption(option, true);
+					//设置
+					bikeDevelopmentChart.setOption(option, true);
 				});	
 			}, response => {
 				//TODO error	
 			});
 	},
 	methods: {
-		convertData: function (data, geoCoordMap) {
+		convertData: function (data,geoCoordMap) {
 			var res = [];
 			for (var i = 0; i < data.length; i++) {
 				var geoCoord = geoCoordMap[data[i].name];

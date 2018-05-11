@@ -26,7 +26,16 @@
 						</p>
 						<div class="text-center">
 							<router-link
-								v-bind:to="{name: 'BikeDetail', params: { bikeId: bike.id }}">
+								v-bind:to="{
+									name: 'BikeDetail', 
+									params: { 
+										bikeId: bike.id 
+									},
+									query: {
+										color : bike.color,
+										bikeName : bike.name
+									}
+								}">
 								<b-button 
 								class="m-btn"
 								v-bind:style="{
