@@ -6,6 +6,6 @@ fun main(args: Array<String>) {
 }
 
 fun test() {
-  val sn = Utils.generateSn(BaiduMapAPI.GEOCODER_API, "北京")
+  val sn = Utils.generateSn(BaiduMapAPI.GEOCODER_API, "上海")
   println(sn)
 }

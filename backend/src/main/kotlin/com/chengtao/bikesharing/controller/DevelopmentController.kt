@@ -69,19 +69,29 @@ class DevelopmentController {
               .status(HttpStatus.BAD_REQUEST)
               .body(Error(Parameter.deliveryAt.parameterInvalid()))
         } else {
-          //通过百度 API 获取城市的经纬度
+          /**
+           *通过百度 API 获取城市的经纬度
+           */
+          //计算sn,如果为 null ,服务器异常
           val sn = Utils.generateSn(BaiduMapAPI.GEOCODER_API, city) ?: return ResponseEntity
               .status(HttpStatus.INTERNAL_SERVER_ERROR)
               .body(Error(HttpStatus.INTERNAL_SERVER_ERROR.name))
-          //
+          //网络请求
           val baiduMapAPI = RetrofitSingleton
               .instance
               .retrofit
               .create(BaiduMapAPI::class.java)
           val geoCodeCall = baiduMapAPI.getGeoCode(address = city, sn = sn)
+          //如果返回实体为空,服务器异常
           val geoCode = geoCodeCall.execute().body() ?: return ResponseEntity
               .status(HttpStatus.INTERNAL_SERVER_ERROR)
               .body(Error(HttpStatus.INTERNAL_SERVER_ERROR.name))
+          //如果 status != 0,服务器异常
+          if (geoCode.status != 0) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Error(HttpStatus.INTERNAL_SERVER_ERROR.name))
+          }
           //
           return DevelopmentSQL.insertDevelopment(
               bikeId = bikeId,
