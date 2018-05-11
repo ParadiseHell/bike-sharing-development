@@ -8,8 +8,8 @@ CREATE TABLE `development` (
   `city` varchar(10) NOT NULL,
   `delivery_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`delivery_count` int(10) unsigned NOT NULL DEFAULT 0,
-	`location_latitude` flot(9,6) unsigned NOT NULL,
-	`location_longitude` flot(9,6) unsigned NOT NULL,
+	`location_latitude` float(9,6) NOT NULL,
+	`location_longitude` float(9,6) NOT NULL,
 
   PRIMARY KEY (`id`),
 
