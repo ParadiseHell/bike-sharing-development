@@ -5,12 +5,14 @@ import com.chengtao.bikesharing.database.sql.BikeSQL
 import com.chengtao.bikesharing.database.sql.DevelopmentSQL
 import com.chengtao.bikesharing.extension.missingParameter
 import com.chengtao.bikesharing.extension.parameterInvalid
+import com.chengtao.bikesharing.model.Development
 import com.chengtao.bikesharing.model.Error
 import com.chengtao.bikesharing.request.BaiduMapAPI
 import com.chengtao.bikesharing.request.RetrofitSingleton
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -110,18 +112,19 @@ class DevelopmentController {
     }
   }
 
-  @GetMapping("/developments")
-  fun getBikeDevelopments(@RequestParam(value = Parameter.bikeId) bikeId: Int?): Any {
-    return if (bikeId == null) {
-      DevelopmentSQL.queryAllDevelopments()
+  @GetMapping("bikes/{bikeId}/developments")
+  fun getDevelopmentsByBikeId(@PathVariable(name = "bikeId") bikeId: Int): Any {
+    return if (BikeSQL.queryBikeById(bikeId) == null) {
+      ResponseEntity
+          .status(HttpStatus.NOT_FOUND)
+          .body(Error("${Parameter.bikeId}($bikeId) not exist"))
     } else {
-      if (BikeSQL.queryBikeById(bikeId) == null) {
-        ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(Error("${Parameter.bikeId}($bikeId) not exist"))
-      } else {
-        DevelopmentSQL.queryDevelopmentsByBikeId(bikeId)
-      }
+      DevelopmentSQL.queryDevelopmentsByBikeId(bikeId)
     }
+  }
+
+  @GetMapping("/developments")
+  fun getBikeDevelopments(): List<Development> {
+    return DevelopmentSQL.queryAllDevelopments()
   }
 }
