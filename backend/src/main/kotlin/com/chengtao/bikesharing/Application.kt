@@ -6,13 +6,14 @@ import org.springframework.context.annotation.Bean
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 @SpringBootApplication
 class Application {
   @Bean
   fun corsConfigurer(): WebMvcConfigurer {
     return object : WebMvcConfigurer {
       override fun addCorsMappings(registry: CorsRegistry?) {
-        registry?.addMapping("/*")?.allowedOrigins("*") ?: super.addCorsMappings(registry)
+        registry?.addMapping("/**")?.allowedOrigins("*") ?: super.addCorsMappings(registry)
       }
     }
   }

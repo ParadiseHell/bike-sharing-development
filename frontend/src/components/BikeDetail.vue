@@ -24,16 +24,10 @@ export default {
 		}
 	},
 	mounted(){
+		let apiUrl = API.bikes + "/" + this.$route.params.bikeId + "/developments";
 		this
 			.$http
-			.get(
-				API.developments,
-				{
-					params: {
-						bike_id: this.$route.params.bikeId
-					}
-				}	
-			)
+			.get(apiUrl)
 			.then( response => {
 				response.json().then(developmts => {
 					//
