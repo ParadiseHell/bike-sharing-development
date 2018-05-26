@@ -6,6 +6,7 @@ import com.chengtao.bikesharing.model.Location
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 import java.math.BigDecimal
@@ -102,6 +103,36 @@ object DevelopmentSQL : BaseSQL() {
               column = DevelopmentTable.deliveryAt,
               isAsc = true
           )
+          .forEach {
+            developmentList.add(
+                Development(
+                    id = it[DevelopmentTable.id],
+                    createdAt = it[DevelopmentTable.createdAt].toDate(),
+                    updatedAt = it[DevelopmentTable.updatedAt].toDate(),
+                    bikeId = it[DevelopmentTable.bikeId],
+                    city = it[DevelopmentTable.city],
+                    deliveryAt = it[DevelopmentTable.deliveryAt].toDate(),
+                    deliveryCount = it[DevelopmentTable.deliveryCount],
+                    location = Location(
+                        latitude = it[DevelopmentTable.locationLatitude].toFloat(),
+                        longitude = it[DevelopmentTable.locationLongitude].toFloat()
+                    )
+                )
+            )
+          }
+    }
+    return developmentList
+  }
+
+  /**
+   * 获取所有的发展数据
+   */
+  fun queryAllDevelopments(): List<Development> {
+    val developmentList = ArrayList<Development>()
+    connectDataBase()
+    transaction {
+      DevelopmentTable
+          .selectAll()
           .forEach {
             developmentList.add(
                 Development(
