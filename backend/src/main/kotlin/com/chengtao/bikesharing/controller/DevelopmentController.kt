@@ -5,7 +5,6 @@ import com.chengtao.bikesharing.database.sql.BikeSQL
 import com.chengtao.bikesharing.database.sql.DevelopmentSQL
 import com.chengtao.bikesharing.extension.missingParameter
 import com.chengtao.bikesharing.extension.parameterInvalid
-import com.chengtao.bikesharing.model.Development
 import com.chengtao.bikesharing.model.Error
 import com.chengtao.bikesharing.request.BaiduMapAPI
 import com.chengtao.bikesharing.request.RetrofitSingleton
@@ -112,18 +111,17 @@ class DevelopmentController {
   }
 
   @GetMapping("/developments")
-  fun getBikeDevelopments(@RequestParam(value = Parameter.bikeId) bikeId: Int): Any {
-    return if (BikeSQL.queryBikeById(bikeId) == null) {
-      ResponseEntity
-          .status(HttpStatus.NOT_FOUND)
-          .body(Error("${Parameter.bikeId}($bikeId) not exist"))
+  fun getBikeDevelopments(@RequestParam(value = Parameter.bikeId) bikeId: Int?): Any {
+    return if (bikeId == null) {
+      DevelopmentSQL.queryAllDevelopments()
     } else {
-      DevelopmentSQL.queryDevelopmentsByBikeId(bikeId)
+      if (BikeSQL.queryBikeById(bikeId) == null) {
+        ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(Error("${Parameter.bikeId}($bikeId) not exist"))
+      } else {
+        DevelopmentSQL.queryDevelopmentsByBikeId(bikeId)
+      }
     }
-  }
- 
-  @GetMapping("/developments")
-  fun getAllBikeDevelopments(): List<Development> {
-    return DevelopmentSQL.queryAllDevelopments()
   }
 }
