@@ -5,6 +5,7 @@ import com.chengtao.bikesharing.database.sql.BikeSQL
 import com.chengtao.bikesharing.extension.missingParameter
 import com.chengtao.bikesharing.extension.parameterInvalid
 import com.chengtao.bikesharing.model.Bike
+import com.chengtao.bikesharing.model.Error
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -50,7 +51,7 @@ class BikeController {
     @RequestParam(name = Parameter.name) name: String?,
     @RequestParam(name = Parameter.introduction) introduction: String?,
     @RequestParam(name = Parameter.foundedAt) foundedAt: String?
-  ): Any {
+  ): Any? {
     return when {
       (name == null || name == "") ->
         ResponseEntity
