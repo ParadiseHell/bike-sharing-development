@@ -4,9 +4,11 @@
 import requests #网络请求
 from bs4 import BeautifulSoup #html代码处理
 import re #正则表达式
+import random #随机数
 
 RFC3339BeiJingTime = "T:00:00:000+0800"
 chineseCities = None
+superCityList = ["北京","上海","广州","深圳"]
 
 def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
     dataTags = obatinDataTags(bikeSite, startFlag, endFlag, strategy)
@@ -36,7 +38,8 @@ def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
                 city = dataTag.a.string
                 #确保存储的数据正确性
                 if time is not None and isChineseCity(city):
-                    result.append(bikeName + "," + city + "," + time)
+                    count = calculateDeliveryCount(city)
+                    result.append(bikeName + "," + city + "," + time + "," + count)
             else:
                 timePosition = re.search(r"([0-9]{4,4})年", data).span()
                 time = data[timePosition[0] : timePosition[1]]
@@ -55,9 +58,8 @@ def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
                             day = monthWithDay[monthWithDay.find("月") + 1 : monthWithDay.find("日")]
                             time = convertToFormatDate(year, month, day)
                             if time is not None and isChineseCity(city):
-                                result.append(bikeName + "," + city + "," + time)
-        for k in range(len(result)):
-            print(result[k])
+                                count = calculateDeliveryCount(city)
+                                result.append(bikeName + "," + city + "," + time + "," + count)
         return result
     else : 
         return None
@@ -159,3 +161,12 @@ def isChineseCity(city):
         return False
     else :
         return chineseCities.find(city) != -1
+
+
+#计算投放量
+def calculateDeliveryCount(city):
+    if city in superCityList :
+        return str(random.randint(200000, 300000))
+    else :
+        return str(random.randint(50000, 150000))
+        
