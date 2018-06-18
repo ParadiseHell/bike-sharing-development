@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup #html代码处理
 import re #正则表达式
 import random #随机数
 
-RFC3339BeiJingTime = "T:00:00:00+0800"
+RFC3339BeiJingTime = "T00:00:00+0800"
 chineseCities = None
 superCityList = ["北京","上海","广州","深圳"]
 
