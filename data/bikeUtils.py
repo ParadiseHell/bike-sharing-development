@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup #html代码处理
 import re #正则表达式
 
 RFC3339BeiJingTime = "T:00:00:000+0800"
+chineseCities = None
 
 def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
     dataTags = obatinDataTags(bikeSite, startFlag, endFlag, strategy)
@@ -34,7 +35,7 @@ def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
                 #获取城市
                 city = dataTag.a.string
                 #确保存储的数据正确性
-                if time is not None:
+                if time is not None and isChineseCity(city):
                     result.append(bikeName + "," + city + "," + time)
             else:
                 timePosition = re.search(r"([0-9]{4,4})年", data).span()
@@ -53,7 +54,7 @@ def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
                             month = monthWithDay[0 : monthWithDay.find("月")]
                             day = monthWithDay[monthWithDay.find("月") + 1 : monthWithDay.find("日")]
                             time = convertToFormatDate(year, month, day)
-                            if time is not None :
+                            if time is not None and isChineseCity(city):
                                 result.append(bikeName + "," + city + "," + time)
         for k in range(len(result)):
             print(result[k])
@@ -122,3 +123,39 @@ def convertToFormatDate(year, month, day):
         elif len(day) == 1 :
             day = "0" + day
         return year + "-" + month + "-" + day + RFC3339BeiJingTime
+
+def isChineseCity(city):
+    global chineseCities
+    if chineseCities is None : 
+        try :
+            cityFile = open("city.json")
+            lines = cityFile.readlines()
+            result = ""
+            for i in range(len(lines)):
+                line = str(lines[i]).strip()
+                line = line.replace("\n", "")
+                line = line.replace("\r", "")
+                line = line.replace("\"", "")
+                line = line.replace(":", "")
+                line = line.replace(" ", "")
+                line = line.replace("name", "")
+                line = line.replace("code", "")
+                line = line.replace("district", "")
+                line = line.replace("[", "")
+                line = line.replace("]", "")
+                line = line.replace("{", "")
+                line = line.replace("}", "")
+                line = line.replace(",", "")
+                try : 
+                    int(line)
+                except ValueError :
+                    index = line.find(u"市")
+                    if index != -1 and index == (len(line) - 1):
+                        result += (line + ",")
+            chineseCities = result
+        except IOError :
+            return False
+    if chineseCities is None :
+        return False
+    else :
+        return chineseCities.find(city) != -1
