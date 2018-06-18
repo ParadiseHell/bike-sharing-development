@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup #html代码处理
 import re #正则表达式
 import random #随机数
 
-RFC3339BeiJingTime = "T:00:00:000+0800"
+RFC3339BeiJingTime = "T:00:00:00+0800"
 chineseCities = None
 superCityList = ["北京","上海","广州","深圳"]
 
@@ -18,7 +18,7 @@ def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
         city = ""
         for i in range(len(dataTags)):
             dataTag = dataTags[i]
-            data = str(dataTags)
+            data = str(dataTag)
             if i == 0:
                 if strategy == 0 : #ofo
                     timePosition = re.search(r"([0-9]{4,4})年[0-1]?[0-9]月([0-3]?[0-9]日)?", data).span()
@@ -32,7 +32,7 @@ def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
                 #计算年月日并转换成格式化时间
                 year = time[0 : 4]
                 month = time[time.find("年") + 1 : time.find("月")]
-                day = time[time.find("月") + 1 : len(time)]
+                day = time[time.find("月") + 1 : time.find("日")]
                 time = convertToFormatDate(year, month, day)
                 #获取城市
                 city = dataTag.a.string

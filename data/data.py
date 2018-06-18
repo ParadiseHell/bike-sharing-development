@@ -22,6 +22,7 @@ developmentFilePath = "test.txt"
 def main():
     try:
         developmentFile = open(developmentFilePath, "w") 
+        print("obtaining ofo data......")
         ofoData = bikeUtils.obtainBikeData(ofoSite, ofoName, ofoStartFlag, ofoEndFlag, ofoStrategy)
         if ofoData is None or len(ofoData) == 0:
             return
@@ -30,6 +31,7 @@ def main():
             for data in ofoData:
                 developmentFile.write(data + "\n")
             developmentFile.write("\n")
+        print("obtaining mobike data......")
         mobikeData = bikeUtils.obtainBikeData(mobikeSite, mobikeName, mobikeStartFlag, mobikeEndFlag, mobikeStrategy)
         if mobikeData is None or len(mobikeData) == 0:
             print("cannot obtain mobike data")
