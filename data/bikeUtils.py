@@ -58,6 +58,8 @@ def obtainBikeData(bikeSite, bikeName ,startFlag, endFlag, strategy):
         for k in range(len(result)):
             print(result[k])
         return result
+    else : 
+        return None
 
 #获取数据soup
 def obatinDataTags(bikeSite ,startFlag, endFlag, strategy):
